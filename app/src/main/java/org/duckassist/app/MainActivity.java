@@ -87,6 +87,7 @@ public class MainActivity extends Activity {
     private final boolean restricted = false;
     private boolean pendingVoiceChat = false;
     private boolean pendingAutoFocus = false;
+    private boolean isPageLoadingComplete = false;
     private boolean pendingContinueLastChat = false;
     private Uri pendingSharedFileUri = null;
     private java.util.List<Uri> pendingSharedFileUris = null;
@@ -257,76 +258,47 @@ public class MainActivity extends Activity {
             "})();";
 
     private final String AUTO_FOCUS_JS = "(function() {" +
-            "  if (window.isVoiceChatActive) {" +
-            "    console.log('Voice chat active, suppressing auto focus');" +
-            "    return;" +
+            "  if (window.isVoiceChatActive || window.__duckAutoFocusDone) return;" +
+            "  function isPageLoaded() {" +
+            "    if (document.readyState !== 'complete') return false;" +
+            "    var loader = document.getElementById('app-loader');" +
+            "    if (loader) {" +
+            "      var style = window.getComputedStyle(loader);" +
+            "      if (style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0) {" +
+            "        return false;" +
+            "      }" +
+            "    }" +
+            "    var input = document.querySelector('textarea[name=\"user-prompt\"], textarea, [contenteditable=\"true\"]');" +
+            "    if (!input || input.disabled || input.offsetParent === null) return false;" +
+            "    var rect = input.getBoundingClientRect();" +
+            "    if (rect.width === 0 || rect.height === 0) return false;" +
+            "    return true;" +
             "  }" +
-            "  console.log('Auto Focus: waiting for page progress to complete before triggering Ctrl+Shift+O');" +
-            "  function sendShortcut() {" +
-            "    if (window.isVoiceChatActive) return;" +
-            "    console.log('Dispatching Ctrl+Shift+O shortcut');" +
-            "    var targets = [window, document, document.body, document.documentElement, document.activeElement];" +
-            "    var events = ['keydown', 'keypress', 'keyup'];" +
-            "    var configs = [" +
-            "      { key: 'O', code: 'KeyO', keyCode: 79, which: 79, ctrlKey: true, shiftKey: true, bubbles: true, cancelable: true }," +
-            "      { key: 'o', code: 'KeyO', keyCode: 79, which: 79, ctrlKey: true, shiftKey: true, bubbles: true, cancelable: true }," +
-            "      { key: 'O', code: 'KeyO', keyCode: 79, which: 79, metaKey: true, shiftKey: true, bubbles: true, cancelable: true }," +
-            "      { key: 'o', code: 'KeyO', keyCode: 79, which: 79, metaKey: true, shiftKey: true, bubbles: true, cancelable: true }" +
-            "    ];" +
-            "    for (var i = 0; i < targets.length; i++) {" +
-            "      var t = targets[i];" +
-            "      if (!t) continue;" +
-            "      for (var c = 0; c < configs.length; c++) {" +
-            "        for (var e = 0; e < events.length; e++) {" +
-            "          try {" +
-            "            t.dispatchEvent(new KeyboardEvent(events[e], configs[c]));" +
-            "          } catch (err) {}" +
+            "  function doFocus() {" +
+            "    if (window.isVoiceChatActive || window.__duckAutoFocusDone) return true;" +
+            "    if (!isPageLoaded()) return false;" +
+            "    window.__duckAutoFocusDone = true;" +
+            "    setTimeout(function() {" +
+            "      if (window.isVoiceChatActive) return;" +
+            "      var input = document.querySelector('textarea[name=\"user-prompt\"], textarea, [contenteditable=\"true\"]');" +
+            "      if (input && !input.disabled) {" +
+            "        input.focus();" +
+            "        input.click();" +
+            "        if (window.Android && window.Android.showSoftKeyboard) {" +
+            "          window.Android.showSoftKeyboard();" +
             "        }" +
             "      }" +
-            "    }" +
-            "    if (window.Android && window.Android.triggerShortcutNative) {" +
-            "      window.Android.triggerShortcutNative();" +
-            "    }" +
+            "    }, 300);" +
+            "    return true;" +
             "  }" +
-            "  function isPageReady() {" +
-            "    var app = document.getElementById('app');" +
-            "    var loader = document.getElementById('app-loader');" +
-            "    var loaderHidden = !loader || loader.classList.contains('loader-hidden') || loader.style.display === 'none' || loader.style.opacity === '0';" +
-            "    var hasContent = app && app.children && app.children.length > 0;" +
-            "    return (hasContent && loaderHidden) || document.querySelector('textarea, [contenteditable=\"true\"]') !== null;" +
-            "  }" +
-            "  function focusAndOpenKeyboard() {" +
-            "    if (window.isVoiceChatActive) return;" +
-            "    var input = document.querySelector('textarea, [contenteditable=\"true\"], input[type=\"text\"]');" +
-            "    if (input) {" +
-            "      input.focus();" +
-            "      input.click();" +
-            "    }" +
-            "    if (window.Android && window.Android.showSoftKeyboard) {" +
-            "      window.Android.showSoftKeyboard();" +
-            "    }" +
-            "  }" +
-            "  var attempts = 0;" +
-            "  function checkAndFire() {" +
-            "    if (window.isVoiceChatActive) return true;" +
-            "    attempts++;" +
-            "    if (isPageReady() || attempts >= 25) {" +
-            "      if (window.isVoiceChatActive) return true;" +
-            "      console.log('Page ready (attempt ' + attempts + '), firing Ctrl+Shift+O');" +
-            "      sendShortcut();" +
-            "      setTimeout(function() { if (!window.isVoiceChatActive) sendShortcut(); }, 400);" +
-            "      setTimeout(function() { if (!window.isVoiceChatActive) focusAndOpenKeyboard(); }, 600);" +
-            "      setTimeout(function() { if (!window.isVoiceChatActive) focusAndOpenKeyboard(); }, 1200);" +
-            "      return true;" +
-            "    }" +
-            "    return false;" +
-            "  }" +
-            "  if (!checkAndFire()) {" +
+            "  if (!doFocus()) {" +
+            "    var attempts = 0;" +
             "    var interval = setInterval(function() {" +
-            "      if (checkAndFire()) {" +
+            "      attempts++;" +
+            "      if (doFocus() || attempts >= 40) {" +
             "        clearInterval(interval);" +
             "      }" +
-            "    }, 400);" +
+            "    }, 150);" +
             "  }" +
             "})();";
 
@@ -717,6 +689,7 @@ public class MainActivity extends Activity {
             "})();";
 
     private String lastFetchedChatsJson = "{}";
+    private android.app.Dialog settingsDialog = null;
     private android.app.Dialog chatsViewerDialog = null;
     private android.app.Dialog scriptsManagerDialog = null;
     private boolean isRequestingViewer = false;
@@ -1147,11 +1120,17 @@ public class MainActivity extends Activity {
     @JavascriptInterface
     public void showSoftKeyboard() {
         runOnUiThread(() -> {
-            chatWebView.requestFocus();
-            android.view.inputmethod.InputMethodManager imm = 
-                (android.view.inputmethod.InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(chatWebView, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            if (settingsDialog != null && settingsDialog.isShowing()) return;
+            if (promptDialog != null && promptDialog.isShowing()) return;
+            if (chatsViewerDialog != null && chatsViewerDialog.isShowing()) return;
+            if (scriptsManagerDialog != null && scriptsManagerDialog.isShowing()) return;
+            if (chatWebView != null) {
+                chatWebView.requestFocus();
+                android.view.inputmethod.InputMethodManager imm = 
+                    (android.view.inputmethod.InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(chatWebView, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                }
             }
         });
     }
@@ -1166,29 +1145,12 @@ public class MainActivity extends Activity {
 
     @JavascriptInterface
     public void triggerShortcut() {
-        runOnUiThread(() -> {
-            Toast.makeText(MainActivity.this, "Triggering Ctrl+Shift+O...", Toast.LENGTH_SHORT).show();
-            if (chatWebView != null) {
-                chatWebView.evaluateJavascript(AUTO_FOCUS_JS, null);
-                long now = android.os.SystemClock.uptimeMillis();
-                int meta = KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON;
-                chatWebView.dispatchKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_O, 0, meta));
-                chatWebView.dispatchKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_O, 0, meta));
-            }
-        });
+        // Safe no-op
     }
 
     @JavascriptInterface
     public void triggerShortcutNative() {
-        runOnUiThread(() -> {
-            if (chatWebView != null) {
-                chatWebView.requestFocus();
-                long now = android.os.SystemClock.uptimeMillis();
-                int meta = KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON;
-                chatWebView.dispatchKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_O, 0, meta));
-                chatWebView.dispatchKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_O, 0, meta));
-            }
-        });
+        // Safe no-op
     }
 
     @JavascriptInterface
@@ -1259,10 +1221,14 @@ public class MainActivity extends Activity {
     @JavascriptInterface
     public void showSettingsDialog() {
         runOnUiThread(() -> {
-            android.app.Dialog dialog = new android.app.Dialog(MainActivity.this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            if (settingsDialog != null && settingsDialog.isShowing()) {
+                settingsDialog.dismiss();
+            }
+            settingsDialog = new android.app.Dialog(MainActivity.this);
+            settingsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             
             WebView webView = new WebView(MainActivity.this);
+            webView.setBackgroundColor(Color.TRANSPARENT);
             WebSettings ws = webView.getSettings();
             ws.setJavaScriptEnabled(true);
             ws.setDomStorageEnabled(true);
@@ -1327,7 +1293,9 @@ public class MainActivity extends Activity {
                             });
                         }
                         runOnUiThread(() -> {
-                            dialog.dismiss();
+                            if (settingsDialog != null) {
+                                settingsDialog.dismiss();
+                            }
                             Toast.makeText(MainActivity.this, "Settings saved successfully", Toast.LENGTH_SHORT).show();
                         });
                     } catch (Exception e) {
@@ -1377,13 +1345,19 @@ public class MainActivity extends Activity {
 
                 @JavascriptInterface
                 public void dismissSettings() {
-                    runOnUiThread(() -> dialog.dismiss());
+                    runOnUiThread(() -> {
+                        if (settingsDialog != null) {
+                            settingsDialog.dismiss();
+                        }
+                    });
                 }
 
                 @JavascriptInterface
                 public void openChatsViewer() {
                     runOnUiThread(() -> {
-                        dialog.dismiss();
+                        if (settingsDialog != null) {
+                            settingsDialog.dismiss();
+                        }
                         fetchChatsAndShowViewer();
                     });
                 }
@@ -1391,7 +1365,9 @@ public class MainActivity extends Activity {
                 @JavascriptInterface
                 public void openScriptsManager() {
                     runOnUiThread(() -> {
-                        dialog.dismiss();
+                        if (settingsDialog != null) {
+                            settingsDialog.dismiss();
+                        }
                         showScriptsManagerDialog();
                     });
                 }
@@ -1399,10 +1375,10 @@ public class MainActivity extends Activity {
 
             webView.loadUrl("file:///android_asset/settings.html");
             
-            dialog.setContentView(webView);
-            dialog.show();
+            settingsDialog.setContentView(webView);
+            settingsDialog.show();
             
-            Window window = dialog.getWindow();
+            Window window = settingsDialog.getWindow();
             if (window != null) {
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                 window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
@@ -2677,15 +2653,20 @@ public class MainActivity extends Activity {
             safeEvaluateJavascript(chatWebView, "window.isVoiceChatActive = false;");
             SharedPreferences prefs = getSharedPreferences("duck_assist_prefs", MODE_PRIVATE);
             boolean autoFocus = prefs.getBoolean("auto_focus_keyboard", false);
-            if (autoFocus) {
+            if (autoFocus && !prefs.getBoolean("prompt_on_launch", false)) {
                 String currentUrl = chatWebView.getUrl();
-                if (currentUrl != null && currentUrl.startsWith("https://duck.ai")) {
-                    chatWebView.evaluateJavascript(AUTO_FOCUS_JS, null);
+                if (currentUrl != null && currentUrl.startsWith("https://duck.ai") && isPageLoadingComplete) {
+                    safeEvaluateJavascript(chatWebView, "window.__duckAutoFocusDone = false;");
+                    safeEvaluateJavascript(chatWebView, AUTO_FOCUS_JS);
+                    pendingAutoFocus = false;
                 } else {
                     pendingAutoFocus = true;
-                    chatWebView.loadUrl("https://duck.ai/");
+                    if (currentUrl == null || currentUrl.isEmpty() || currentUrl.equals("about:blank")) {
+                        chatWebView.loadUrl("https://duck.ai/");
+                    }
                 }
             } else {
+                pendingAutoFocus = false;
                 if (chatWebView.getUrl() == null || chatWebView.getUrl().isEmpty()
                         || chatWebView.getUrl().equals("about:blank")) {
                     chatWebView.loadUrl("https://duck.ai/");
@@ -2820,6 +2801,14 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void checkAndTriggerAutoFocus(WebView view) {
+        if (!pendingVoiceChat && pendingAutoFocus && isPageLoadingComplete) {
+            pendingAutoFocus = false;
+            safeEvaluateJavascript(view, "window.__duckAutoFocusDone = false;");
+            safeEvaluateJavascript(view, AUTO_FOCUS_JS);
+        }
+    }
+
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -2848,6 +2837,7 @@ public class MainActivity extends Activity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            isPageLoadingComplete = false;
             hasInjectedProgressJs = false;
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -2857,6 +2847,7 @@ public class MainActivity extends Activity {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
             if (isSafeMode) return;
+            isPageLoadingComplete = true;
             safeEvaluateJavascript(view, BLOB_JS);
             safeEvaluateJavascript(view, CLIPBOARD_JS);
             safeEvaluateJavascript(view, IMAGE_ZOOM_MONITOR_JS);
@@ -2864,10 +2855,7 @@ public class MainActivity extends Activity {
             if (prefs.getBoolean("rtl_resolver", false)) {
                 safeEvaluateJavascript(view, RTL_RESOLVER_JS);
             }
-            if (!pendingVoiceChat && (pendingAutoFocus || prefs.getBoolean("auto_focus_keyboard", false))) {
-                safeEvaluateJavascript(view, AUTO_FOCUS_JS);
-                pendingAutoFocus = false;
-            }
+            checkAndTriggerAutoFocus(view);
             safeEvaluateJavascript(view, SETTINGS_INJECT_JS);
             safeEvaluateJavascript(view, SWIPE_SCROLL_JS);
             injectUserScripts(view, url);
@@ -2931,10 +2919,7 @@ public class MainActivity extends Activity {
                 }
             }
             if (newProgress == 100) {
-                SharedPreferences prefs = view.getContext().getSharedPreferences("duck_assist_prefs", MODE_PRIVATE);
-                if (!pendingVoiceChat && prefs.getBoolean("auto_focus_keyboard", false)) {
-                    safeEvaluateJavascript(view, AUTO_FOCUS_JS);
-                }
+                checkAndTriggerAutoFocus(view);
             }
         }
 
