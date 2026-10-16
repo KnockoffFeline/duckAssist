@@ -26,6 +26,8 @@ You can download **duckAssist** from:
 - 📁 **Native File Support**: Seamlessly upload documents for AI analysis and download attachments directly to your device's Downloads folder.
 - 🎨 **Custom Identity**: Features a premium new duck-themed visual identity and icon.
 - ⚙️ **HTML Settings & Custom Prompts**: Configure bottom drawer panel behavior, assistant voice options, and default prompt suffixes for text ("Ask duck.ai") and document sharing separately via a custom-styled HTML settings page.
+- ☕ **Developer Support Hub**: In-app developer support dialog featuring real-time GitHub release downloads, repository statistics, and direct developer support options (Ko-fi, Buy Me a Chai, PayPal).
+- ⌨️ **Refined Auto-Focus**: Non-intrusive chat input auto-focus that waits for complete page readiness and respects keyboard dismiss actions.
 - 🚨 **High-Visibility Banner Alert**: Integrated a custom, animated red banner overlay instructing you how to attach shared files instead of low-visibility system toasts.
 
 ## Usage

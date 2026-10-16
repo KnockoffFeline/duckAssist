@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,6 +76,7 @@
                 transform: translateY(16px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -481,12 +483,16 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
             <div class="header-title-container">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/>
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                        fill="currentColor" />
                 </svg>
                 <h1>Developer Support</h1>
             </div>
@@ -497,7 +503,7 @@
         <div class="hero-card">
             <div class="hero-title">
                 duckAssist
-                <span class="version-badge" id="appVersion">v0.4.6</span>
+                <span class="version-badge" id="appVersion">v0.4.7</span>
             </div>
             <div class="hero-desc">
                 Privacy-focused Android WebView wrapper for Duck.ai AI Chat.
@@ -514,24 +520,28 @@
                 <span>☕ Support the Project</span>
             </div>
             <div class="paypal-card-desc">
-                If you find duckAssist useful and want to keep this open-source project thriving, consider supporting development via Ko-fi, Buy Me a Chai, or PayPal.
+                If you find duckAssist useful and want to keep this open-source project thriving, consider supporting
+                development via Ko-fi, Buy Me a Chai, or PayPal.
             </div>
             <div class="donation-buttons">
                 <button type="button" class="kofi-btn" onclick="openExternal('https://ko-fi.com/diekaiju')">
                     <svg viewBox="0 0 24 24">
-                        <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.047 3.974-4.047 3.974s-2.7-2.486-3.96-3.938c-.879-1.012-.744-2.34-.744-2.34.25-1.42 1.621-1.636 1.621-1.636 1.558-.088 2.698 1.177 2.698 1.177s1.304-1.29 2.92-1.196c1.616.095 1.83 1.583 1.83 1.583s-.011 1.096-.318 2.38zm5.727-1.018c-.282 1.453-1.442 2.14-2.88 2.228.163-1.895.059-3.79-.015-5.688 1.705.021 3.208.57 2.895 3.46z"/>
+                        <path
+                            d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.047 3.974-4.047 3.974s-2.7-2.486-3.96-3.938c-.879-1.012-.744-2.34-.744-2.34.25-1.42 1.621-1.636 1.621-1.636 1.558-.088 2.698 1.177 2.698 1.177s1.304-1.29 2.92-1.196c1.616.095 1.83 1.583 1.83 1.583s-.011 1.096-.318 2.38zm5.727-1.018c-.282 1.453-1.442 2.14-2.88 2.228.163-1.895.059-3.79-.015-5.688 1.705.021 3.208.57 2.895 3.46z" />
                     </svg>
                     Support me on Ko-fi
                 </button>
                 <button type="button" class="chai-btn" onclick="openExternal('https://www.buymeachai.in/diekaiju')">
                     <svg viewBox="0 0 24 24">
-                        <path d="M2 19h18v2H2v-2zm2-9v7c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2v-7H4zm13 2v3h2c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1h-2zm0-2h2c1.66 0 3 1.34 3 3v1c0 1.66-1.34 3-3 3h-2v1c0 2.21-1.79 4-4 4H6c-2.21 0-4-1.79-4-4v-8h15zm-9-7c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1H5a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3zm5 0c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1h-2a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3z"/>
+                        <path
+                            d="M2 19h18v2H2v-2zm2-9v7c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2v-7H4zm13 2v3h2c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1h-2zm0-2h2c1.66 0 3 1.34 3 3v1c0 1.66-1.34 3-3 3h-2v1c0 2.21-1.79 4-4 4H6c-2.21 0-4-1.79-4-4v-8h15zm-9-7c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1H5a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3zm5 0c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1h-2a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3z" />
                     </svg>
-                    Buy me a Chai (UPI / Cards)
+                    Buy me a Chai (upi)
                 </button>
                 <button type="button" class="paypal-btn" onclick="openExternal('https://paypal.me/diekaiju')">
                     <svg viewBox="0 0 24 24">
-                        <path d="M20.067 8.478c.492.315.844.82 1.01 1.452.427 1.62-.27 3.518-1.74 4.74-1.25 1.04-2.89 1.58-4.88 1.58h-1.92c-.44 0-.82.32-.89.76l-.78 4.95-.03.22c-.06.39-.4.67-.79.67H6.28c-.46 0-.8-.4-.73-.85l2.4-15.22c.07-.44.45-.76.89-.76h5.36c2.4 0 4.23.51 5.31 1.76.24.27.42.57.56.88.02.04.05.07.07.11z"/>
+                        <path
+                            d="M20.067 8.478c.492.315.844.82 1.01 1.452.427 1.62-.27 3.518-1.74 4.74-1.25 1.04-2.89 1.58-4.88 1.58h-1.92c-.44 0-.82.32-.89.76l-.78 4.95-.03.22c-.06.39-.4.67-.79.67H6.28c-.46 0-.8-.4-.73-.85l2.4-15.22c.07-.44.45-.76.89-.76h5.36c2.4 0 4.23.51 5.31 1.76.24.27.42.57.56.88.02.04.05.07.07.11z" />
                     </svg>
                     Donate with PayPal
                 </button>
@@ -552,10 +562,12 @@
         </div>
 
         <div class="badge-preview-container">
-            <div class="native-badge" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')" title="View GitHub Releases">
+            <div class="native-badge" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')"
+                title="View GitHub Releases">
                 <div class="native-badge-label">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                     </svg>
                     <span>GitHub Downloads</span>
                 </div>
@@ -570,7 +582,8 @@
                 <div class="link-left">
                     <div class="link-icon-wrap" style="background: rgba(255,255,255,0.08);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            <path
+                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                         </svg>
                     </div>
                     <div>
@@ -584,8 +597,9 @@
             <div class="link-item" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')">
                 <div class="link-left">
                     <div class="link-icon-wrap" style="background: rgba(222,88,51,0.15); color: var(--accent-color);">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
                         </svg>
                     </div>
                     <div>
@@ -600,7 +614,8 @@
                 <div class="link-left">
                     <div class="link-icon-wrap" style="background: rgba(25,118,210,0.15); color: var(--fdroid-blue);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.8 6.2c-.4-.7-1.1-1.2-1.9-1.2H7.1c-.8 0-1.5.5-1.9 1.2L2.3 12l2.9 5.8c.4.7 1.1 1.2 1.9 1.2h9.8c.8 0 1.5-.5 1.9-1.2l2.9-5.8-2.9-5.8zM12 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/>
+                            <path
+                                d="M18.8 6.2c-.4-.7-1.1-1.2-1.9-1.2H7.1c-.8 0-1.5.5-1.9 1.2L2.3 12l2.9 5.8c.4.7 1.1 1.2 1.9 1.2h9.8c.8 0 1.5-.5 1.9-1.2l2.9-5.8-2.9-5.8zM12 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" />
                         </svg>
                     </div>
                     <div>
@@ -613,7 +628,8 @@
         </div>
 
         <footer>
-            Licensed under GPLv3 • Developed by <a href="javascript:void(0)" onclick="openExternal('https://github.com/diekaiju')">diekaiju</a>
+            Licensed under GPLv3 • Developed by <a href="javascript:void(0)"
+                onclick="openExternal('https://github.com/diekaiju')">diekaiju</a>
         </footer>
     </div>
 
@@ -646,7 +662,7 @@
             }
         }
 
-        window.updateLiveStats = function(downloads, stars) {
+        window.updateLiveStats = function (downloads, stars) {
             applyStats(downloads, stars);
         };
 
@@ -717,4 +733,5 @@
         }
     </script>
 </body>
+
 </html>
