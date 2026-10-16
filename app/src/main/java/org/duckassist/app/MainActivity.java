@@ -692,6 +692,7 @@ public class MainActivity extends Activity {
     private android.app.Dialog settingsDialog = null;
     private android.app.Dialog chatsViewerDialog = null;
     private android.app.Dialog scriptsManagerDialog = null;
+    private android.app.Dialog supportDialog = null;
     private boolean isRequestingViewer = false;
 
     private final String DUMP_CHATS_JS = "(function() {" +
@@ -1121,6 +1122,7 @@ public class MainActivity extends Activity {
     public void showSoftKeyboard() {
         runOnUiThread(() -> {
             if (settingsDialog != null && settingsDialog.isShowing()) return;
+            if (supportDialog != null && supportDialog.isShowing()) return;
             if (promptDialog != null && promptDialog.isShowing()) return;
             if (chatsViewerDialog != null && chatsViewerDialog.isShowing()) return;
             if (scriptsManagerDialog != null && scriptsManagerDialog.isShowing()) return;
@@ -1369,6 +1371,16 @@ public class MainActivity extends Activity {
                             settingsDialog.dismiss();
                         }
                         showScriptsManagerDialog();
+                    });
+                }
+
+                @JavascriptInterface
+                public void openSupportPage() {
+                    runOnUiThread(() -> {
+                        if (settingsDialog != null) {
+                            settingsDialog.dismiss();
+                        }
+                        showSupportDialog();
                     });
                 }
             }, "AndroidSettings");
@@ -1943,6 +1955,181 @@ public class MainActivity extends Activity {
                 window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
             }
         });
+    }
+
+    public void showSupportDialog() {
+        runOnUiThread(() -> {
+            if (supportDialog != null && supportDialog.isShowing()) {
+                supportDialog.dismiss();
+            }
+            supportDialog = new android.app.Dialog(MainActivity.this);
+            supportDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+            WebView webView = new WebView(MainActivity.this);
+            webView.setBackgroundColor(Color.TRANSPARENT);
+            WebSettings ws = webView.getSettings();
+            ws.setJavaScriptEnabled(true);
+            ws.setDomStorageEnabled(true);
+            ws.setAllowFileAccess(true);
+            ws.setAllowContentAccess(true);
+            ws.setAllowFileAccessFromFileURLs(true);
+            ws.setAllowUniversalAccessFromFileURLs(true);
+            webView.setWebChromeClient(new WebChromeClient());
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (url == null) return false;
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                        return true;
+                    } catch (Throwable t) {
+                        Log.e(TAG, "Error opening external link: " + url, t);
+                        return false;
+                    }
+                }
+            });
+
+            webView.addJavascriptInterface(new Object() {
+                @JavascriptInterface
+                public void dismiss() {
+                    runOnUiThread(() -> {
+                        if (supportDialog != null) {
+                            supportDialog.dismiss();
+                        }
+                    });
+                }
+
+                @JavascriptInterface
+                public void openUrl(String url) {
+                    if (url == null || url.isEmpty()) return;
+                    runOnUiThread(() -> {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(intent);
+                        } catch (Throwable t) {
+                            Log.e(TAG, "Error opening external link: " + url, t);
+                        }
+                    });
+                }
+
+                @JavascriptInterface
+                public String getAppVersion() {
+                    return BuildConfig.VERSION_NAME;
+                }
+
+                @JavascriptInterface
+                public String getRepoStatsJson() {
+                    SharedPreferences prefs = getSharedPreferences("duck_assist_prefs", MODE_PRIVATE);
+                    int downloads = prefs.getInt("github_downloads_count", 160);
+                    int stars = prefs.getInt("github_stars_count", 87);
+                    try {
+                        org.json.JSONObject obj = new org.json.JSONObject();
+                        obj.put("downloads", downloads);
+                        obj.put("stars", stars);
+                        return obj.toString();
+                    } catch (Exception e) {
+                        return "{\"downloads\":160,\"stars\":87}";
+                    }
+                }
+            }, "AndroidSupport");
+
+            fetchGitHubStatsAsync(webView);
+
+            webView.loadUrl("file:///android_asset/support.html");
+            supportDialog.setContentView(webView);
+            supportDialog.show();
+
+            Window window = supportDialog.getWindow();
+            if (window != null) {
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            }
+        });
+    }
+
+    private void fetchGitHubStatsAsync(final WebView supportWebView) {
+        new Thread(() -> {
+            try {
+                int downloads = 0;
+                int stars = -1;
+
+                // 1. Fetch releases for download count
+                java.net.URL releasesUrl = new java.net.URL("https://api.github.com/repos/diekaiju/duckAssist/releases");
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) releasesUrl.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("User-Agent", "duckAssist-Android");
+                conn.setConnectTimeout(6000);
+                conn.setReadTimeout(6000);
+
+                if (conn.getResponseCode() == 200) {
+                    java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    in.close();
+                    org.json.JSONArray releases = new org.json.JSONArray(sb.toString());
+                    for (int i = 0; i < releases.length(); i++) {
+                        org.json.JSONObject rel = releases.getJSONObject(i);
+                        org.json.JSONArray assets = rel.optJSONArray("assets");
+                        if (assets != null) {
+                            for (int j = 0; j < assets.length(); j++) {
+                                downloads += assets.getJSONObject(j).optInt("download_count", 0);
+                            }
+                        }
+                    }
+                }
+                conn.disconnect();
+
+                // 2. Fetch repository metadata for star count
+                java.net.URL repoUrl = new java.net.URL("https://api.github.com/repos/diekaiju/duckAssist");
+                java.net.HttpURLConnection repoConn = (java.net.HttpURLConnection) repoUrl.openConnection();
+                repoConn.setRequestMethod("GET");
+                repoConn.setRequestProperty("User-Agent", "duckAssist-Android");
+                repoConn.setConnectTimeout(6000);
+                repoConn.setReadTimeout(6000);
+
+                if (repoConn.getResponseCode() == 200) {
+                    java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(repoConn.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    in.close();
+                    org.json.JSONObject repoJson = new org.json.JSONObject(sb.toString());
+                    stars = repoJson.optInt("stargazers_count", -1);
+                }
+                repoConn.disconnect();
+
+                SharedPreferences prefs = getSharedPreferences("duck_assist_prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                if (downloads > 0) {
+                    editor.putInt("github_downloads_count", downloads);
+                }
+                if (stars >= 0) {
+                    editor.putInt("github_stars_count", stars);
+                }
+                editor.apply();
+
+                final int finalDownloads = (downloads > 0) ? downloads : prefs.getInt("github_downloads_count", 160);
+                final int finalStars = (stars >= 0) ? stars : prefs.getInt("github_stars_count", 87);
+
+                if (supportWebView != null) {
+                    runOnUiThread(() -> {
+                        try {
+                            supportWebView.evaluateJavascript("if (typeof window.updateLiveStats === 'function') { window.updateLiveStats(" + finalDownloads + ", " + finalStars + "); }", null);
+                        } catch (Throwable t) {
+                            Log.e(TAG, "Error updating stats in support webview", t);
+                        }
+                    });
+                }
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to fetch GitHub stats", t);
+            }
+        }).start();
     }
 
     private String getDefaultScriptsJson() {

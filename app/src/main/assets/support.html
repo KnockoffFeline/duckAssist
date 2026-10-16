@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Support - duckAssist</title>
+    <style>
+        :root {
+            --bg-color: #16171a;
+            --card-bg: #212226;
+            --card-hover: #292a2f;
+            --accent-color: #de5833;
+            --accent-hover: #e06948;
+            --text-primary: #f5f6f7;
+            --text-secondary: #9fa2a6;
+            --border-color: #2c2d30;
+            --paypal-blue: #0070ba;
+            --paypal-dark: #003087;
+            --paypal-yellow: #ffc439;
+            --github-bg: #24292e;
+            --fdroid-blue: #1976d2;
+            --badge-bg: #2c2e35;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #f7f7f7;
+                --card-bg: #ffffff;
+                --card-hover: #f3f4f6;
+                --accent-color: #de5833;
+                --accent-hover: #e06948;
+                --text-primary: #222222;
+                --text-secondary: #656565;
+                --border-color: #e5e5e5;
+                --paypal-blue: #0070ba;
+                --paypal-dark: #003087;
+                --paypal-yellow: #ffc439;
+                --github-bg: #24292e;
+                --fdroid-blue: #1976d2;
+                --badge-bg: #ffece5;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(16px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        header {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            color: var(--accent-color);
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 22px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, rgba(222, 88, 51, 0.12), rgba(222, 88, 51, 0.03));
+            border: 1px solid rgba(222, 88, 51, 0.25);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .hero-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .version-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .hero-desc {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .hero-quote {
+            margin-top: 10px;
+            font-size: 12.5px;
+            font-style: italic;
+            color: var(--text-primary);
+            opacity: 0.9;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+            margin-top: 16px;
+        }
+
+        /* PayPal Card & Button */
+        .paypal-card {
+            background: linear-gradient(135deg, rgba(0, 112, 186, 0.12), rgba(0, 48, 135, 0.06));
+            border: 1px solid rgba(0, 112, 186, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .paypal-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .paypal-card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.45;
+        }
+
+        .donation-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .kofi-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 20px;
+            background-color: #72a4f2;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(114, 164, 242, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+        }
+
+        .kofi-btn:hover {
+            transform: translateY(-1px);
+            background-color: #5d93e8;
+            box-shadow: 0 6px 18px rgba(114, 164, 242, 0.5);
+        }
+
+        .kofi-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(114, 164, 242, 0.3);
+        }
+
+        .kofi-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .chai-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 20px;
+            background: linear-gradient(135deg, #FF813F 0%, #D84315 100%);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(255, 129, 63, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .chai-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #FF914D 0%, #E64A19 100%);
+            box-shadow: 0 6px 18px rgba(255, 129, 63, 0.5);
+        }
+
+        .chai-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(255, 129, 63, 0.3);
+        }
+
+        .chai-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .paypal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 20px;
+            background: linear-gradient(135deg, #0070ba 0%, #003087 100%);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(0, 112, 186, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .paypal-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0, 112, 186, 0.5);
+        }
+
+        .paypal-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(0, 112, 186, 0.3);
+        }
+
+        .paypal-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Stats & Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background-color: var(--input-bg, rgba(255, 255, 255, 0.03));
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .stat-label {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-preview-container {
+            margin-top: 6px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .native-badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .native-badge:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .native-badge-label {
+            background-color: #555555;
+            color: #ffffff;
+            padding: 5px 9px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .native-badge-value {
+            background-color: #007ec6;
+            color: #ffffff;
+            padding: 5px 10px;
+            font-weight: 700;
+        }
+
+        /* Link Rows */
+        .links-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background-color: var(--input-bg, rgba(255, 255, 255, 0.03));
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+        }
+
+        .link-item:hover {
+            background-color: var(--card-hover);
+            border-color: rgba(222, 88, 51, 0.4);
+            transform: translateX(2px);
+        }
+
+        .link-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .link-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .link-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .link-arrow {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        footer {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title-container">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/>
+                </svg>
+                <h1>Developer Support</h1>
+            </div>
+            <button class="close-btn" onclick="closePage()" aria-label="Close">✕</button>
+        </header>
+
+        <!-- Hero Card -->
+        <div class="hero-card">
+            <div class="hero-title">
+                duckAssist
+                <span class="version-badge" id="appVersion">v0.4.6</span>
+            </div>
+            <div class="hero-desc">
+                Privacy-focused Android WebView wrapper for Duck.ai AI Chat.
+            </div>
+            <div class="hero-quote">
+                "duckAssist is vibe coded in my free time bringing you the best user experience."
+            </div>
+        </div>
+
+        <!-- Support & Donations -->
+        <div class="section-label">Support & Donations</div>
+        <div class="paypal-card">
+            <div class="paypal-card-title">
+                <span>☕ Support the Project</span>
+            </div>
+            <div class="paypal-card-desc">
+                If you find duckAssist useful and want to keep this open-source project thriving, consider supporting development via Ko-fi, Buy Me a Chai, or PayPal.
+            </div>
+            <div class="donation-buttons">
+                <button type="button" class="kofi-btn" onclick="openExternal('https://ko-fi.com/diekaiju')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.047 3.974-4.047 3.974s-2.7-2.486-3.96-3.938c-.879-1.012-.744-2.34-.744-2.34.25-1.42 1.621-1.636 1.621-1.636 1.558-.088 2.698 1.177 2.698 1.177s1.304-1.29 2.92-1.196c1.616.095 1.83 1.583 1.83 1.583s-.011 1.096-.318 2.38zm5.727-1.018c-.282 1.453-1.442 2.14-2.88 2.228.163-1.895.059-3.79-.015-5.688 1.705.021 3.208.57 2.895 3.46z"/>
+                    </svg>
+                    Support me on Ko-fi
+                </button>
+                <button type="button" class="chai-btn" onclick="openExternal('https://www.buymeachai.in/diekaiju')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2 19h18v2H2v-2zm2-9v7c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2v-7H4zm13 2v3h2c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1h-2zm0-2h2c1.66 0 3 1.34 3 3v1c0 1.66-1.34 3-3 3h-2v1c0 2.21-1.79 4-4 4H6c-2.21 0-4-1.79-4-4v-8h15zm-9-7c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1H5a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3zm5 0c-.55 0-1 .45-1 1s.45 1 1 1 1 .45 1 1-.45 1-1 1a1 1 0 0 1-1-1h-2a3 3 0 0 0 3 3c.55 0 1-.45 1-1s-.45-1-1-1-1-.45-1-1 .45-1 1-1a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3z"/>
+                    </svg>
+                    Buy me a Chai (UPI / Cards)
+                </button>
+                <button type="button" class="paypal-btn" onclick="openExternal('https://paypal.me/diekaiju')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.067 8.478c.492.315.844.82 1.01 1.452.427 1.62-.27 3.518-1.74 4.74-1.25 1.04-2.89 1.58-4.88 1.58h-1.92c-.44 0-.82.32-.89.76l-.78 4.95-.03.22c-.06.39-.4.67-.79.67H6.28c-.46 0-.8-.4-.73-.85l2.4-15.22c.07-.44.45-.76.89-.76h5.36c2.4 0 4.23.51 5.31 1.76.24.27.42.57.56.88.02.04.05.07.07.11z"/>
+                    </svg>
+                    Donate with PayPal
+                </button>
+            </div>
+        </div>
+
+        <!-- Download Statistics -->
+        <div class="section-label">Community & Statistics</div>
+        <div class="stats-grid">
+            <div class="stat-card" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')">
+                <div class="stat-value" id="downloadCount">160+</div>
+                <div class="stat-label">GitHub Downloads</div>
+            </div>
+            <div class="stat-card" onclick="openExternal('https://github.com/diekaiju/duckAssist')">
+                <div class="stat-value" id="starCount">★ 87</div>
+                <div class="stat-label">Project Repository</div>
+            </div>
+        </div>
+
+        <div class="badge-preview-container">
+            <div class="native-badge" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')" title="View GitHub Releases">
+                <div class="native-badge-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    <span>GitHub Downloads</span>
+                </div>
+                <div class="native-badge-value" id="badgeDownloadValue">160+</div>
+            </div>
+        </div>
+
+        <!-- Project Links -->
+        <div class="section-label">Official Links</div>
+        <div class="links-group">
+            <div class="link-item" onclick="openExternal('https://github.com/diekaiju/duckAssist')">
+                <div class="link-left">
+                    <div class="link-icon-wrap" style="background: rgba(255,255,255,0.08);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="link-title">GitHub Repository</div>
+                        <div class="link-subtitle">github.com/diekaiju/duckAssist</div>
+                    </div>
+                </div>
+                <div class="link-arrow">→</div>
+            </div>
+
+            <div class="link-item" onclick="openExternal('https://github.com/diekaiju/duckAssist/releases')">
+                <div class="link-left">
+                    <div class="link-icon-wrap" style="background: rgba(222,88,51,0.15); color: var(--accent-color);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="link-title">GitHub Releases</div>
+                        <div class="link-subtitle">Download latest APK packages & changelogs</div>
+                    </div>
+                </div>
+                <div class="link-arrow">→</div>
+            </div>
+
+            <div class="link-item" onclick="openExternal('https://f-droid.org/packages/org.diekaiju.duckassist/')">
+                <div class="link-left">
+                    <div class="link-icon-wrap" style="background: rgba(25,118,210,0.15); color: var(--fdroid-blue);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.8 6.2c-.4-.7-1.1-1.2-1.9-1.2H7.1c-.8 0-1.5.5-1.9 1.2L2.3 12l2.9 5.8c.4.7 1.1 1.2 1.9 1.2h9.8c.8 0 1.5-.5 1.9-1.2l2.9-5.8-2.9-5.8zM12 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="link-title">F-Droid Package</div>
+                        <div class="link-subtitle">org.diekaiju.duckassist</div>
+                    </div>
+                </div>
+                <div class="link-arrow">→</div>
+            </div>
+        </div>
+
+        <footer>
+            Licensed under GPLv3 • Developed by <a href="javascript:void(0)" onclick="openExternal('https://github.com/diekaiju')">diekaiju</a>
+        </footer>
+    </div>
+
+    <script>
+        function closePage() {
+            if (typeof AndroidSupport !== 'undefined' && AndroidSupport.dismiss) {
+                AndroidSupport.dismiss();
+            }
+        }
+
+        function openExternal(url) {
+            if (typeof AndroidSupport !== 'undefined' && AndroidSupport.openUrl) {
+                AndroidSupport.openUrl(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        function applyStats(downloads, stars) {
+            if (downloads !== undefined && downloads !== null && !isNaN(downloads)) {
+                const formatted = Number(downloads).toLocaleString();
+                const dElem = document.getElementById('downloadCount');
+                const bElem = document.getElementById('badgeDownloadValue');
+                if (dElem) dElem.textContent = formatted;
+                if (bElem) bElem.textContent = formatted;
+            }
+            if (stars !== undefined && stars !== null && !isNaN(stars)) {
+                const sElem = document.getElementById('starCount');
+                if (sElem) sElem.innerHTML = `★ ${Number(stars).toLocaleString()}`;
+            }
+        }
+
+        window.updateLiveStats = function(downloads, stars) {
+            applyStats(downloads, stars);
+        };
+
+        function initStats() {
+            // Read stats from Android native bridge if available
+            if (typeof AndroidSupport !== 'undefined' && AndroidSupport.getRepoStatsJson) {
+                try {
+                    const stats = JSON.parse(AndroidSupport.getRepoStatsJson());
+                    if (stats) {
+                        applyStats(stats.downloads, stats.stars);
+                    }
+                } catch (e) {
+                    console.error('Error parsing stats JSON', e);
+                }
+            }
+
+            // Also attempt live fetch in background
+            fetchRepoStats();
+        }
+
+        // Initialize version and statistics
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof AndroidSupport !== 'undefined' && AndroidSupport.getAppVersion) {
+                const version = AndroidSupport.getAppVersion();
+                if (version) {
+                    document.getElementById('appVersion').textContent = 'v' + version;
+                }
+            }
+            initStats();
+        });
+
+        async function fetchRepoStats() {
+            try {
+                // Fetch releases to calculate total downloads
+                const relRes = await fetch('https://api.github.com/repos/diekaiju/duckAssist/releases');
+                if (relRes.ok) {
+                    const releases = await relRes.json();
+                    let totalDownloads = 0;
+                    if (Array.isArray(releases)) {
+                        releases.forEach(rel => {
+                            if (Array.isArray(rel.assets)) {
+                                rel.assets.forEach(asset => {
+                                    totalDownloads += (asset.download_count || 0);
+                                });
+                            }
+                        });
+                    }
+                    if (totalDownloads > 0) {
+                        applyStats(totalDownloads, null);
+                    }
+                }
+            } catch (e) {
+                // Keep current cached / default stats
+            }
+
+            try {
+                // Fetch repo for star count
+                const repoRes = await fetch('https://api.github.com/repos/diekaiju/duckAssist');
+                if (repoRes.ok) {
+                    const repoData = await repoRes.json();
+                    if (repoData && repoData.stargazers_count !== undefined) {
+                        applyStats(null, repoData.stargazers_count);
+                    }
+                }
+            } catch (e) {
+                // Keep current cached / default stats
+            }
+        }
+    </script>
+</body>
+</html>

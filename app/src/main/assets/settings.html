@@ -402,6 +402,16 @@
                 </div>
                 <button type="button" class="action-btn" onclick="openScriptsManager()">Scripts</button>
             </div>
+
+            <div class="section-title">Support & About</div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Support Developer</div>
+                    <div class="setting-desc">Donate, view download statistics, and explore the project repository.</div>
+                </div>
+                <button type="button" class="action-btn" onclick="openSupportPage()">Support</button>
+            </div>
         </form>
     </div>
 
@@ -547,6 +557,12 @@
         function openScriptsManager() {
             if (typeof AndroidSettings !== 'undefined' && AndroidSettings.openScriptsManager) {
                 AndroidSettings.openScriptsManager();
+            }
+        }
+
+        function openSupportPage() {
+            if (typeof AndroidSettings !== 'undefined' && AndroidSettings.openSupportPage) {
+                AndroidSettings.openSupportPage();
             }
         }
     </script>

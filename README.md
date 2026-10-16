@@ -76,4 +76,9 @@ If you like duckAssist, you're welcome to send a donation. duckAssist is vibe co
 If you want to support the developer:
 
  [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/diekaiju)
+ [![Ko-fi](https://img.shields.io/badge/Ko--fi-72A4F2?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/diekaiju)
+ [![Buy Me A Chai](https://img.shields.io/badge/Buy%20Me%20A%20Chai-FF813F?style=for-the-badge&logoColor=white)](https://www.buymeachai.in/diekaiju)
+
+<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'D6L120QPE4');kofiwidget2.draw();</script>
+
 
